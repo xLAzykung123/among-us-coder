@@ -2,43 +2,43 @@ import { useState, useEffect } from 'react';
 import socket from '../socket';
 import '../styles/CategoryVote.css';
 
-// Category info matching server definition
+// Category info with pixel icons (no emojis)
 const CATEGORY_INFO = {
   DATA_STRUCTURES: {
-    emoji: '🔗',
+    icon: '[]',
     name: 'Data Structures',
-    description: 'Work with stacks, queues, and linked lists',
-    color: '#FF6B6B'
+    description: 'Stacks, queues, lists',
+    color: '#3131FF'
   },
   OOP: {
-    emoji: '🏗️',
+    icon: '{}',
     name: 'OOP',
-    description: 'Classes, inheritance, and polymorphism',
-    color: '#4ECDC4'
+    description: 'Classes & inheritance',
+    color: '#FF3131'
   },
   SECURITY: {
-    emoji: '🔒',
+    icon: '#',
     name: 'Security',
-    description: 'Prevent vulnerabilities and attacks',
-    color: '#95E1D3'
+    description: 'Safe coding',
+    color: '#31FF31'
   },
   FRONTEND: {
-    emoji: '🎨',
+    icon: '<>',
     name: 'Frontend',
-    description: 'DOM, CSS, and React challenges',
-    color: '#FFE66D'
+    description: 'DOM & React',
+    color: '#FFFF31'
   },
   ALGORITHMS: {
-    emoji: '⚡',
+    icon: '>',
     name: 'Algorithms',
-    description: 'Sorting, searching, and optimization',
-    color: '#FF8C42'
+    description: 'Sorting & search',
+    color: '#FF31FF'
   },
   DATABASES: {
-    emoji: '🗄️',
+    icon: 'D',
     name: 'Databases',
-    description: 'SQL, queries, and data modeling',
-    color: '#A8E6CF'
+    description: 'SQL & queries',
+    color: '#31FFFF'
   }
 };
 
@@ -136,14 +136,14 @@ export default function CategoryVote({ gameState, setGameState, setScreen }) {
       <div className="category-vote-screen">
         <div className="category-selection-animation">
           <div className="celebration">
-            <span>🎉</span>
-            <span>🎉</span>
-            <span>🎉</span>
+            <span>*</span>
+            <span>*</span>
+            <span>*</span>
           </div>
           <div className="selected-category-display">
-            <div className="category-emoji">{selectedInfo.emoji}</div>
+            <div className="category-icon">{selectedInfo.icon}</div>
             <h1>{selectedInfo.name}</h1>
-            <p>Selected for this round!</p>
+            <p>SELECTED</p>
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ export default function CategoryVote({ gameState, setGameState, setScreen }) {
               key={categoryKey}
               className={`category-card${isLeading ? ' leading' : ''}${isSelected ? ' selected' : ''}`}
             >
-              <div className="category-emoji">{categoryInfo.emoji}</div>
+              <div className="category-icon">{categoryInfo.icon}</div>
               <h2>{categoryInfo.name}</h2>
               <p className="category-description">{categoryInfo.description}</p>
               <div className="vote-bar">
