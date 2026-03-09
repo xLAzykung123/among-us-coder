@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg-deep: #050709;
+  --bg-dark: #0a0e1a;
+  --bg-panel: #0d1224;
+  --bg-card: #111827;
+  --accent-cyan: #00fff0;
+  --accent-red: #ff3b3b;
+  --accent-green: #39ff14;
+  --accent-yellow: #ffd700;
+  --text-primary: #e2e8f0;
+  --text-dim: #64748b;
+  --border: #1e2d4a;
+  --glow-cyan: 0 0 20px rgba(0,255,240,0.3);
+  --glow-red: 0 0 20px rgba(255,59,59,0.4);
+  --glow-green: 0 0 20px rgba(57,255,20,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app { min-height: 100vh; }
+
+/* Stars background */
+.stars-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0,255,240,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(170,68,255,0.03) 0%, transparent 50%),
+    var(--bg-deep);
+  z-index: 0;
+}
+
+.stars-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 30%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95% 55%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 60%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 70% 5%, rgba(0,255,240,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 20% 90%, rgba(170,68,255,0.3) 0%, transparent 100%);
+}
+
+/* Buttons */
+.btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.btn-primary {
+  background: var(--accent-cyan);
+  color: var(--bg-deep);
+  box-shadow: var(--glow-cyan);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,255,240,0.5); }
+
+.btn-danger {
+  background: var(--accent-red);
+  color: white;
+  box-shadow: var(--glow-red);
+  animation: pulse-red 2s infinite;
+}
+.btn-danger:hover { transform: translateY(-2px); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { color: var(--text-primary); border-color: var(--accent-cyan); }
+
+.btn-sabotage {
+  background: linear-gradient(135deg, #1a0505, #2d0a0a);
+  color: var(--accent-red);
+  border: 1px solid var(--accent-red);
+  font-size: 0.65rem;
+}
+.btn-sabotage:hover { background: rgba(255,59,59,0.15); box-shadow: var(--glow-red); }
+.btn-sabotage:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* Panel */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+/* Input */
+.input {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 0 2px rgba(0,255,240,0.1); }
+.input::placeholder { color: var(--text-dim); }
+
+/* Astronaut icon */
+.astronaut {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: 2px solid currentColor;
+  flex-shrink: 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+
+/* Animations */
+@keyframes pulse-red {
+  0%, 100% { box-shadow: var(--glow-red); }
+  50% { box-shadow: 0 0 40px rgba(255,59,59,0.7); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes glitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.fade-in { animation: fadeIn 0.4s ease forwards; }
+.slide-in { animation: slideIn 0.3s ease forwards; }
+
+/* Timer warning */
+.timer-warning {
+  color: var(--accent-red) !important;
+  animation: pulse-red 1s infinite;
+}
+
+/* Pass/Fail */
+.test-pass { color: var(--accent-green); }
+.test-fail { color: var(--accent-red); }
+
+/* Orbitron heading */
+h1, h2, h3 { font-family: 'Orbitron', sans-serif; }
+
+/* Tag */
+.tag {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+.tag-easy { background: rgba(57,255,20,0.15); color: var(--accent-green); border: 1px solid rgba(57,255,20,0.3); }
+.tag-medium { background: rgba(255,215,0,0.15); color: var(--accent-yellow); border: 1px solid rgba(255,215,0,0.3); }
+.tag-hard { background: rgba(255,59,59,0.15); color: var(--accent-red); border: 1px solid rgba(255,59,59,0.3); }
