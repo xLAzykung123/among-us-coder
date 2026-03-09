@@ -1,0 +1,15 @@
+{
+  "name": "among-us-coder",
+  "version": "1.0.0",
+  "description": "Among Us Coder - A multiplayer coding game",
+  "main": "server/src/index.js",
+  "scripts": {
+    "start": "cd server && node src/index.js",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build:client": "cd client && npm run build"
+  },
+  "keywords": ["among-us", "coder", "multiplayer", "game"],
+  "author": "",
+  "license": "MIT"
+}
