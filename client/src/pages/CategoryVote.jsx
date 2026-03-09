@@ -105,6 +105,13 @@ export default function CategoryVote({ gameState, setGameState }) {
     }
   };
 
+  // Get players who voted for a category
+  const getPlayersForCategory = (categoryId) => {
+    return gameState.players?.filter(
+      (p) => playerVotes && playerVotes[p.id] === categoryId
+    ) || [];
+  };
+
   const getCategoryVotes = (categoryId) => {
     return votes[categoryId] || 0;
   };
@@ -146,60 +153,57 @@ export default function CategoryVote({ gameState, setGameState }) {
   return (
     <div className="category-vote-screen">
       <div className="category-vote-header">
-        <h1>Choose the Category</h1>
+        <h1>Vote for a Category!</h1>
         <div className="timer">
-          <div className={`time-display ${timeLeft <= 10 ? 'warning' : ''}`}>
-            {timeLeft}s
-          </div>
+          <div className={`time-display ${timeLeft <= 5 ? 'warning' : ''}`}>{timeLeft}s</div>
         </div>
-      </div>
-
-      <div className="votes-remaining">
-        Votes Remaining: <span className="vote-count">{2 - myVotes}</span>/2
+        <div className="votes-remaining">
+          Votes Remaining: <span className="vote-count">{2 - myVotes}</span>/2
+        </div>
       </div>
 
       <div className="categories-grid">
         {categories.map((categoryKey) => {
           const categoryInfo = CATEGORY_INFO[categoryKey];
+          const isLeading = leadingCategory === categoryKey;
+          const isSelected = selectedCategory === categoryKey;
+          const playersForCat = getPlayersForCategory(categoryKey);
           return (
             <div
               key={categoryKey}
-              className={`category-card ${
-                leadingCategory === categoryKey ? 'leading' : ''
-              } ${selectedCategory === categoryKey ? 'selected' : ''}`}
-              onClick={() => handleVoteCategory(categoryKey)}
+              className={`category-card${isLeading ? ' leading' : ''}${isSelected ? ' selected' : ''}`}
             >
               <div className="category-emoji">{categoryInfo.emoji}</div>
               <h2>{categoryInfo.name}</h2>
               <p className="category-description">{categoryInfo.description}</p>
-              
               <div className="vote-bar">
-                <div 
-                  className="vote-fill" 
-                  style={{ 
-                    width: `${Math.min(getCategoryVotes(categoryKey) * 20, 100)}%`
-                  }}
+                <div
+                  className="vote-fill"
+                  style={{ width: `${Math.min(getCategoryVotes(categoryKey) * 20, 100)}%` }}
                 />
               </div>
               <div className="vote-count">{getCategoryVotes(categoryKey)} votes</div>
+              <button
+                className="vote-btn"
+                disabled={isSelected || myVotes >= 2}
+                onClick={() => handleVoteCategory(categoryKey)}
+              >
+                {isSelected ? 'VOTED' : 'VOTE'}
+              </button>
+              <div className="player-avatars" style={{ marginTop: 10 }}>
+                {playersForCat.map((player) => (
+                  <div
+                    key={player.id}
+                    className="player-avatar"
+                    title={player.name}
+                  >
+                    {player.name.charAt(0).toUpperCase()}
+                  </div>
+                ))}
+              </div>
             </div>
           );
         })}
-      </div>
-
-      <div className="voting-players">
-        <h3>Players Voting:</h3>
-        <div className="player-avatars">
-          {gameState.players?.map(player => (
-            <div
-              key={player.id}
-              className="player-avatar"
-              title={player.name}
-            >
-              {player.name.charAt(0).toUpperCase()}
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
