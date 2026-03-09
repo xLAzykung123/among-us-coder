@@ -7,6 +7,7 @@
     "start": "cd server && node src/index.js",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
+    "build": "cd client && npm install && npm run build",
     "build:client": "cd client && npm run build"
   },
   "keywords": ["among-us", "coder", "multiplayer", "game"],
