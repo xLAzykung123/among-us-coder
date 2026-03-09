@@ -1,5 +1,5 @@
 const { createRoom, joinRoom, assignRoles, getRoom, getPlayerBySocket, removePlayer, addCommit } = require('./rooms');
-const { challenges, runTestCases } = require('./challenges');
+const { challenges, flatChallenges, runTestCases } = require('./challenges');
 
 function setupSockets(io) {
   io.on('connection', (socket) => {
@@ -83,7 +83,7 @@ function setupSockets(io) {
       startRoundTimer(io, roomId);
       io.to(roomId).emit('round_started', {
         roundNumber: room.currentRound,
-        challenge: safeChallenge(challenges[room.currentChallengeIndex]),
+        challenge: safeChallenge(flatChallenges[room.currentChallengeIndex]),
         code: room.currentCode,
       });
     });
@@ -191,7 +191,7 @@ function setupSockets(io) {
       if (!room || room.saboteurId !== playerId) return;
       if (room.sabotagesCompleted >= room.sabotagesRequired) return;
 
-      const challenge = challenges[room.currentChallengeIndex];
+      const challenge = flatChallenges[room.currentChallengeIndex];
       const sabotage = challenge.sabotages[sabotageIndex];
       if (!sabotage) return;
 
@@ -297,13 +297,13 @@ function advanceRound(io, roomId) {
     return;
   }
 
-  const nextChallengeIndex = Math.min(room.currentRound - 1, challenges.length - 1);
+  const nextChallengeIndex = Math.min(room.currentRound - 1, flatChallenges.length - 1);
   room.currentChallengeIndex = nextChallengeIndex;
-  room.currentCode = challenges[nextChallengeIndex].starterCode;
+  room.currentCode = flatChallenges[nextChallengeIndex].starterCode;
 
   io.to(roomId).emit('round_changed', {
     roundNumber: room.currentRound,
-    challenge: safeChallenge(challenges[nextChallengeIndex]),
+    challenge: safeChallenge(flatChallenges[nextChallengeIndex]),
     code: room.currentCode,
   });
 
@@ -406,7 +406,7 @@ function proceedToRoleReveal(io, roomId) {
   // Assign roles
   const updatedRoom = assignRoles(roomId);
   updatedRoom.gameState = 'role_reveal';
-  updatedRoom.currentCode = challenges[0].starterCode;
+  updatedRoom.currentCode = flatChallenges[0].starterCode;
   updatedRoom.currentChallengeIndex = 0;
 
   updatedRoom.players.forEach(p => {
@@ -414,7 +414,7 @@ function proceedToRoleReveal(io, roomId) {
     if (playerSocket) {
       playerSocket.emit('game_started', {
         role: p.role,
-        challenge: safeChallenge(challenges[0]),
+        challenge: safeChallenge(flatChallenges[0]),
         players: updatedRoom.players.map(publicPlayer),
         selectedCategory: room.selectedCategory,
       });
