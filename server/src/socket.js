@@ -29,20 +29,50 @@ function setupSockets(io) {
       const data = getPlayerBySocket(socket.id);
       if (!data || !data.player.isHost) return;
 
-      const updatedRoom = assignRoles(roomId);
-      updatedRoom.gameState = 'role_reveal';
-      updatedRoom.currentCode = challenges[0].starterCode;
-      updatedRoom.currentChallengeIndex = 0;
+      // Initialize category voting
+      room.gameState = 'category_vote';
+      room.categoryVotes = {
+        DATA_STRUCTURES: 0,
+        OOP: 0,
+        SECURITY: 0,
+        FRONTEND: 0,
+        ALGORITHMS: 0,
+        DATABASES: 0,
+      };
+      room.playerCategoryVotes = {}; // { playerId: categoryId, ... }
+      room.categoryVotingStartTime = Date.now();
+      room.categoryVotingTimeLimit = 30000; // 30 seconds
 
-      updatedRoom.players.forEach(p => {
-        const playerSocket = io.sockets.sockets.get(p.socketId);
-        if (playerSocket) {
-          playerSocket.emit('game_started', {
-            role: p.role,
-            challenge: safeChallenge(challenges[0]),
-            players: updatedRoom.players.map(publicPlayer),
-          });
-        }
+      // Notify all players that voting has started
+      io.to(roomId).emit('category_voting_started', {
+        categories: Object.keys(room.categoryVotes),
+      });
+
+      // Set timer to end voting automatically
+      if (room.categoryVotingTimer) clearTimeout(room.categoryVotingTimer);
+      room.categoryVotingTimer = setTimeout(() => {
+        selectWinningCategory(io, roomId);
+      }, room.categoryVotingTimeLimit);
+    });
+
+    socket.on('cast_category_vote', ({ roomId, playerId, categoryId }) => {
+      const room = getRoom(roomId);
+      if (!room || room.gameState !== 'category_vote') return;
+      
+      // Remove previous vote if player already voted
+      if (room.playerCategoryVotes[playerId]) {
+        const previousCategory = room.playerCategoryVotes[playerId];
+        room.categoryVotes[previousCategory] = Math.max(0, (room.categoryVotes[previousCategory] || 0) - 1);
+      }
+
+      // Add new vote
+      room.playerCategoryVotes[playerId] = categoryId;
+      room.categoryVotes[categoryId] = (room.categoryVotes[categoryId] || 0) + 1;
+
+      // Broadcast updated vote counts to all players
+      io.to(roomId).emit('category_vote_update', {
+        votes: room.categoryVotes,
+        playerVotes: room.playerCategoryVotes,
       });
     });
 
@@ -326,6 +356,70 @@ function publicPlayer(player) {
     isAlive: player.isAlive,
     isHost: player.isHost,
   };
+}
+
+function selectWinningCategory(io, roomId) {
+  const room = getRoom(roomId);
+  if (!room || room.gameState !== 'category_vote') return;
+
+  // Clear the timer
+  if (room.categoryVotingTimer) clearTimeout(room.categoryVotingTimer);
+
+  // Find category with most votes
+  let maxVotes = 0;
+  let selectedCategory = null;
+  const categories = Object.keys(room.categoryVotes);
+
+  for (const category of categories) {
+    const votes = room.categoryVotes[category];
+    if (votes > maxVotes) {
+      maxVotes = votes;
+      selectedCategory = category;
+    }
+  }
+
+  // If no votes yet, pick random category
+  if (!selectedCategory || maxVotes === 0) {
+    selectedCategory = categories[Math.floor(Math.random() * categories.length)];
+  }
+
+  // Store selected category in room
+  room.selectedCategory = selectedCategory;
+
+  // Notify all players that category has been selected
+  io.to(roomId).emit('category_selected', {
+    category: selectedCategory,
+    votes: room.categoryVotes,
+    reason: maxVotes > 0 ? 'winner' : 'no_votes',
+  });
+
+  // Wait 3 seconds for animation, then assign roles and start game
+  setTimeout(() => {
+    proceedToRoleReveal(io, roomId);
+  }, 3000);
+}
+
+function proceedToRoleReveal(io, roomId) {
+  const room = getRoom(roomId);
+  if (!room) return;
+
+  // Assign roles
+  const updatedRoom = assignRoles(roomId);
+  updatedRoom.gameState = 'role_reveal';
+  updatedRoom.currentCode = challenges[0].starterCode;
+  updatedRoom.currentChallengeIndex = 0;
+
+  updatedRoom.players.forEach(p => {
+    const playerSocket = io.sockets.sockets.get(p.socketId);
+    if (playerSocket) {
+      playerSocket.emit('game_started', {
+        role: p.role,
+        challenge: safeChallenge(challenges[0]),
+        players: updatedRoom.players.map(publicPlayer),
+        selectedCategory: room.selectedCategory,
+      });
+    }
+  });
 }
 
 module.exports = { setupSockets };

@@ -1,0 +1,326 @@
+.category-vote-screen {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-vote-header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.category-vote-header h1 {
+  font-size: 3.5rem;
+  margin: 0 0 20px 0;
+  text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 107, 107, 0.8);
+  }
+}
+
+.timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.time-display {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #4ECDC4;
+  background: rgba(78, 205, 196, 0.1);
+  padding: 15px 30px;
+  border-radius: 10px;
+  border: 2px solid #4ECDC4;
+  min-width: 120px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.time-display.warning {
+  color: #FF6B6B;
+  border-color: #FF6B6B;
+  background: rgba(255, 107, 107, 0.1);
+  animation: pulse-warning 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.votes-remaining {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #95E1D3;
+  font-weight: 500;
+}
+
+.vote-count {
+  color: #FFE66D;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1400px;
+  width: 100%;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.category-card {
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.8), rgba(50, 50, 80, 0.8));
+  border: 2px solid rgba(100, 100, 150, 0.4);
+  border-radius: 15px;
+  padding: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.category-card:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.category-card.leading {
+  border-color: #FFE66D;
+  box-shadow: 0 0 20px rgba(255, 230, 109, 0.5),
+              inset 0 0 10px rgba(255, 230, 109, 0.1);
+  animation: pulse-leading 1s ease-in-out infinite;
+}
+
+@keyframes pulse-leading {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 230, 109, 0.5),
+                inset 0 0 10px rgba(255, 230, 109, 0.1);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 230, 109, 0.8),
+                inset 0 0 15px rgba(255, 230, 109, 0.2);
+    transform: scale(1.02);
+  }
+}
+
+.category-card.selected {
+  border-color: #4ECDC4;
+  box-shadow: 0 0 25px rgba(78, 205, 196, 0.6);
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(50, 50, 80, 0.8));
+}
+
+.category-emoji {
+  font-size: 4rem;
+  margin-bottom: 15px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-emoji {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.category-card h2 {
+  font-size: 1.5rem;
+  margin: 10px 0;
+  color: #ffffff;
+}
+
+.category-description {
+  font-size: 0.95rem;
+  color: #95E1D3;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.vote-bar {
+  background: rgba(0, 0, 0, 0.3);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.vote-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ECDC4, #95E1D3);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.category-card .vote-count {
+  font-size: 1.1rem;
+  color: #FFE66D;
+  font-weight: bold;
+}
+
+.voting-players {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.voting-players h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #95E1D3;
+}
+
+.player-avatars {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.player-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4ECDC4, #95E1D3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #1a1a2e;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Category Selection Animation */
+.category-selection-animation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.celebration {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 40px;
+  font-size: 4rem;
+}
+
+.celebration span {
+  animation: bounce 0.8s ease-in-out infinite;
+}
+
+.celebration span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.celebration span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+.selected-category-display {
+  text-align: center;
+  animation: zoom-in 0.5s ease-out;
+}
+
+.selected-category-display .category-emoji {
+  font-size: 8rem;
+  margin-bottom: 20px;
+}
+
+.selected-category-display h1 {
+  font-size: 3rem;
+  color: #FFE66D;
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px rgba(255, 230, 109, 0.6);
+}
+
+.selected-category-display p {
+  font-size: 1.5rem;
+  color: #95E1D3;
+}
+
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .category-vote-header h1 {
+    font-size: 2rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .category-emoji {
+    font-size: 3rem;
+  }
+
+  .category-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .time-display {
+    font-size: 2rem;
+  }
+}
