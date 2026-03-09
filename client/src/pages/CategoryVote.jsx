@@ -45,7 +45,7 @@ const CATEGORY_INFO = {
 export default function CategoryVote({ gameState, setGameState }) {
   const [votes, setVotes] = useState({});
   const [playerVotes, setPlayerVotes] = useState({});
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [myVotes, setMyVotes] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categorySelected, setCategorySelected] = useState(null);

@@ -41,7 +41,7 @@ function setupSockets(io) {
       };
       room.playerCategoryVotes = {}; // { playerId: categoryId, ... }
       room.categoryVotingStartTime = Date.now();
-      room.categoryVotingTimeLimit = 30000; // 30 seconds
+      room.categoryVotingTimeLimit = 15000; // 15 seconds
 
       // Notify all players that voting has started
       io.to(roomId).emit('category_voting_started', {
