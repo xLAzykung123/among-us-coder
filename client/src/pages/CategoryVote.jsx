@@ -42,7 +42,7 @@ const CATEGORY_INFO = {
   }
 };
 
-export default function CategoryVote({ gameState, setGameState }) {
+export default function CategoryVote({ gameState, setGameState, setScreen }) {
   const [votes, setVotes] = useState({});
   const [playerVotes, setPlayerVotes] = useState({});
   const [timeLeft, setTimeLeft] = useState(15);
@@ -67,9 +67,9 @@ export default function CategoryVote({ gameState, setGameState }) {
       setTimeout(() => {
         setGameState(prev => ({
           ...prev,
-          screen: 'roleReveal',
           selectedCategory: category
         }));
+        setScreen('role_reveal');
       }, 3000);
     });
 
