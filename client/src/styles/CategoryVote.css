@@ -166,8 +166,8 @@
     margin-top: 8px;
     filter: drop-shadow(0 0 8px #000a);
   }
-}
-  .category-card:hover {
+
+.category-card:hover {
     border-color: #ffe66d;
     transform: translateY(-8px) scale(1.04) rotate(-2deg);
     box-shadow: 0 16px 40px 0 #ffe66d33, 0 0 0 4px #ffe66d44;
